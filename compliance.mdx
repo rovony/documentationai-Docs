@@ -1,0 +1,146 @@
+---
+title: Regulatory Compliance
+description: Learn how Malek ensures 21 CFR Part 11 compliance through secure logging, signatures, and data handling for pharmaceutical workflows.
+---
+
+## Overview
+
+Malek provides built-in support for 21 CFR Part 11 compliance, essential for pharmaceutical workflows. You maintain audit trails, electronic signatures, and secure data handling across all AI agent interactions and automated processes. This ensures regulatory adherence without custom development.
+
+<Callout kind="info" title="Compliance Foundation">
+Malek uses hash-chained logs, role-based access control (RBAC), and immutable storage to meet FDA requirements. Enable these features during project setup for full compliance.
+</Callout>
+
+## Key Compliance Features
+
+<Columns cols={2}>
+  <Card title="Audit Logs" icon="file-text" href="#audit-logs">
+    Immutable, hash-chained records of all actions.
+  </Card>
+  <Card title="Electronic Signatures" icon="signature" href="#signatures">
+    Secure approval workflows with RBAC.
+  </Card>
+  <Card title="Data Security" icon="shield" href="#data-security">
+    Encrypted storage and access controls.
+  </Card>
+  <Card title="Quality Control" icon="check-circle" href="#quality-control">
+    Automated checks in AI workflows.
+  </Card>
+</Columns>
+
+## Audit Logs and Immutable Records
+
+Malek automatically generates audit logs for every action, including AI agent queries, data uploads, and workflow executions. Logs are hash-chained for tamper-proof integrity, timestamped with UTC, and stored immutably.
+
+### View Your Audit Logs
+
+<Steps>
+  <Step title="Navigate to Logs" icon="file-search">
+    Go to your project dashboard and select the `Logs` tab.
+  </Step>
+  <Step title="Filter Events" icon="filter">
+    Use filters for user, date, or action type.
+  </Step>
+  <Step title="Export Records" icon="download">
+    Download CSV or PDF with digital signatures.
+  </Step>
+</Steps>
+
+```javascript
+// Example log entry structure
+{
+  "eventId": "log-uuid-1234",
+  "timestamp": "2024-10-15T14:30:00Z",
+  "userId": "user-abc123",
+  "action": "nca_analysis_run",
+  "hashChain": "sha256-prev:abc...current:xyz...",
+  "immutable": true
+}
+```
+
+## Electronic Signatures and RBAC Permissions
+
+You assign RBAC roles like Analyst, Reviewer, and Manager. Electronic signatures require multi-factor approval before finalizing workflows.
+
+<Tabs>
+  <Tab title="Analyst Role" icon="user">
+    Run analyses and upload data.
+    
+    <ParamField path="user.role" param-type="string" default-value="analyst">
+      Basic execution permissions.
+    </ParamField>
+  </Tab>
+  <Tab title="Reviewer Role" icon="eye">
+    Approve outputs with e-signature.
+    
+    ```bash
+    curl -X POST https://api.example.com/v1/workflows/{id}/sign \
+      -H "Authorization: Bearer YOUR_TOKEN" \
+      -d '{"signature": "e-sign-hash-xyz", "approved": true}'
+    ```
+  </Tab>
+  <Tab title="Manager Role" icon="users">
+    Full access with audit oversight.
+    
+    <ParamField header="X-Manager-Key" param-type="string" required="true">
+      Override key for escalations.
+    </ParamField>
+  </Tab>
+</Tabs>
+
+## Data Security and Storage Compliance
+
+All data encrypts at rest using AES-256 and in transit with TLS 1.3. Malek complies with GDPR and HIPAA alongside 21 CFR Part 11.
+
+| Feature              | Description                              | Status          |
+|----------------------|------------------------------------------|-----------------|
+| Encryption at Rest   | AES-256 with customer-managed keys       | Enabled         |
+| Access Logs          | Retained 7 years, queryable              | Compliant       |
+| Data Retention       | Configurable policies per project        | Customizable    |
+| Breach Notification  | Automated alerts within 72 hours         | Active          |
+
+<Expandable title="Advanced Storage Config" default-open="false">
+Configure retention via API:
+````json
+{
+  "projectId": "proj-123",
+  "retentionDays": 2555,
+  "complianceMode": "part11"
+}
+````
+</Expandable>
+
+## Quality Control in Automated Workflows
+
+Integrate QC gates into your pharmacometrics pipelines. AI agents flag anomalies, trigger reviews, and require signatures.
+
+<CodeGroup tabs="JavaScript,Python">
+```javascript
+// Workflow with QC step
+const workflow = await malek.createWorkflow({
+  steps: [
+    { agent: 'nca', input: pkData },
+    { qc: 'validate_stats', required: true },
+    { sign: 'reviewer_approval' }
+  ]
+});
+```
+```python
+# Workflow with QC step
+workflow = malek.Workflow.create(
+    steps=[
+        {'agent': 'nca', 'input': pk_data},
+        {'qc': 'validate_stats', 'required': True},
+        {'sign': 'reviewer_approval'}
+    ]
+)
+```
+</CodeGroup>
+
+<Callout kind="tip" title="Best Practice">
+Always enable `complianceMode: "part11"` in project settings for automated QC enforcement.
+</Callout>
+
+## Next Steps
+
+Review your project settings to activate full compliance. For custom configurations, contact support@malek.com.
